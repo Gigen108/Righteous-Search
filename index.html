@@ -4,44 +4,166 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Right Living, Right Joy</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background: white;
+    }
+
+    /* Canvas background */
+    #mantra-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      display: block;
+    }
+
+    /* Content sits above */
+    header, main, footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    main {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(2px);
+    }
+
+    header, footer {
+      background: transparent;
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <h1><a href="index.html"></a></h1>
-    <p class="tagline"></p>
-  </header>
 
-  <main>
-    <section class="intro">
-      <h2>Welcome</h2>
+<!-- MANTRA FIELD CANVAS -->
+<canvas id="mantra-canvas"></canvas>
+
+<header class="site-header">
+  <h1><a href="index.html"></a></h1>
+  <p class="tagline"></p>
+</header>
+
+<main>
+  <section class="intro">
+    <h2>Welcome</h2>
+    <p>
+      I just want true joy for all life, this is an attempt at joy. Written by Gigen 'Omar' Obregon. The site design is plain on purpose. A single word that is genuine is more powerful than all addiction-atention grabbing design.
+    </p>
+  </section>
+
+  <section>
+    <h2>Posts</h2>
+
+    <article class="post-preview">
+      <h3><a href="post1.html">Purpose</a></h3>
+      <p class="post-meta">April 12, 2026</p>
       <p>
-        I just want true joy for all life, this is an attempt at joy. Written by Gigen 'Omar' Obregon. The site design is plain on purpose. A single word that is genuine is more powerful than all addiction-atention grabbing design.
+        Practicing/living in a monestary in the (basically) tundra that is Vermont, I wanted to share about where I live and the mission to preserve life on earth.
       </p>
-    </section>
+    </article>
 
-    <section>
-      <h2>Posts</h2>
+    <article class="post-preview">
+      <h3><a href="post2.html">Training Cohort 2026</a></h3>
+      <p class="post-meta">April 12, 2026</p>
+      <p>True effort, true joy: how can you give your life to genuine happiness?</p>
+    </article>
 
-      <article class="post-preview">
-        <h3><a href="post1.html">Purpose</a></h3>
-        <p class="post-meta">April 12, 2026</p>
-        <p>
-          Practicing/living in a monestary in the (basically) tundra that is Vermont, I wanted to share about where I live and the mission to preserve life on earth.
-        </p>
-      </article>
+    <article class="post-preview">
+      <h3><a href="post1.html">Prayer Wheel</a></h3>
+      <p class="post-meta">May 8, 2026</p>
+      <p>
+        Practicing/living in a monestary in the (basically) tundra that is Vermont, I wanted to share about where I live and the mission to preserve life on earth.
+      </p>
+    </article>
 
-      <article class="post-preview">
-        <h3><a href="post2.html">Training Cohort 2026</a></h3>
-        <p class="post-meta">April 12, 2026</p>
-        <p> True effort, true joy: how can you give your life to genuine happiness?  </p>
-         
-      </article>
-    </section>
-  </main>
+  </section>
+</main>
 
-  <footer class="site-footer">
-    <p>© 2026 Right Living, Right Joy</p>
-  </footer>
+<footer class="site-footer">
+  <p>© 2026 Right Living, Right Joy</p>
+</footer>
+
+<!-- MANTRA ENGINE SCRIPT -->
+<script>
+const canvas = document.getElementById("mantra-canvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+// Sacred text sources
+const mantras = [
+  "OM MANI PADME HUM",
+  "OM VAJRASATTVA HUM",
+  "OM BENZA SATTO HUNG",
+  "OM MANI PADME HUM",
+  "OM VAJRASATTVA HUM"
+];
+
+// Dense flow system
+const rows = [];
+const ROW_SPACING = 12;   // tighter = more dense
+const FONT_SIZE = 10;
+const SPEED = 1.5;        // horizontal motion speed
+
+function initRows() {
+  rows.length = 0;
+  const numRows = Math.ceil(canvas.height / ROW_SPACING) + 2;
+
+  for (let i = 0; i < numRows; i++) {
+    rows.push({
+      y: i * ROW_SPACING,
+      offset: Math.random() * 1000
+    });
+  }
+}
+initRows();
+window.addEventListener("resize", initRows);
+
+ctx.font = FONT_SIZE + "px monospace";
+
+function draw() {
+  // clear
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "black";
+  ctx.font = FONT_SIZE + "px monospace";
+
+  for (let row of rows) {
+    let x = -row.offset;
+    const y = row.y;
+
+    while (x < canvas.width) {
+      const m = mantras[(Math.abs(x + row.y) | 0) % mantras.length];
+      ctx.fillText(m, x, y);
+
+      // extreme density (overlapping intentional)
+      x += 110;
+    }
+
+    // flow motion
+    row.offset += SPEED;
+    if (row.offset > 110) row.offset = 0;
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+
 </body>
 </html>
