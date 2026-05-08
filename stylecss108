@@ -1,0 +1,19 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: white;
+}
+
+/* Ensure content stays above the mantra field */
+header, main, footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Optional: improves readability over moving field */
+main {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(2px);
+  padding: 20px;
+}
