@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mantra Flow Field</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: white;
+  }
+  canvas {
+    display: block;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+// Mantras
+const mantras = [
+  "OM MANI PADME HUM",
+  "OM VAJRASATTVA HUM",
+  "OM BENZA SATTO HUNG",
+  "OM MANI PADME HUM  ",
+  "OM VAJRA SATTVA HUM  "
+];
+
+// Dense text buffer system
+const rows = [];
+const ROW_SPACING = 14;
+const FONT_SIZE = 10;
+const SPEED = 1.2; // horizontal flow speed
+
+function initRows() {
+  rows.length = 0;
+  const numRows = Math.ceil(canvas.height / ROW_SPACING) + 2;
+  for (let i = 0; i < numRows; i++) {
+    rows.push({
+      y: i * ROW_SPACING,
+      offset: Math.random() * 1000
+    });
+  }
+}
+initRows();
+window.addEventListener("resize", initRows);
+
+ctx.font = FONT_SIZE + "px monospace";
+ctx.fillStyle = "black";
+
+function draw() {
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "black";
+  ctx.font = FONT_SIZE + "px monospace";
+
+  for (let row of rows) {
+    let x = -row.offset;
+    const y = row.y;
+
+    while (x < canvas.width) {
+      // pick mantra deterministically but varied
+      const m = mantras[Math.floor((x + row.y) % mantras.length)];
+
+      ctx.fillText(m, x, y);
+
+      // ultra dense spacing (overlapping intentional)
+      x += 120;
+    }
+
+    // horizontal flow
+    row.offset += SPEED;
+    if (row.offset > 120) row.offset = 0;
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>
