@@ -13,18 +13,33 @@
       background: white;
     }
 
-    /* Canvas background */
-    #mantra-canvas {
+    /* Prayer wheel image background */
+    #wheel-track {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
+      width: 200%;
       height: 100vh;
+      display: flex;
       z-index: -1;
-      display: block;
+      animation: wheelScroll 240s linear infinite;
     }
 
-    /* Content sits above */
+    #wheel-track img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @keyframes wheelScroll {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
     header, main, footer {
       position: relative;
       z-index: 1;
@@ -33,6 +48,7 @@
     main {
       background: rgba(255,255,255,0.85);
       backdrop-filter: blur(2px);
+      padding: 20px;
     }
 
     header, footer {
@@ -43,8 +59,11 @@
 
 <body>
 
-<!-- MANTRA FIELD CANVAS -->
-<canvas id="mantra-canvas"></canvas>
+<!-- DIGITAL PRAYER WHEEL -->
+<div id="wheel-track">
+  <img src="vajra-wheel.jpg" alt="">
+  <img src="vajra-wheel.jpg" alt="">
+</div>
 
 <header class="site-header">
   <h1><a href="index.html"></a></h1>
@@ -55,7 +74,7 @@
   <section class="intro">
     <h2>Welcome</h2>
     <p>
-      I just want true joy for all life, this is an attempt at joy. Written by Gigen 'Omar' Obregon. The site design is plain on purpose. A single word that is genuine is more powerful than all addiction-atention grabbing design.
+      I just want true joy for all life, this is an attempt at joy. Written by Gigen 'Omar' Obregon. The site design is plain on purpose. A single word that is genuine is more powerful than all addiction-attention grabbing design.
     </p>
   </section>
 
@@ -66,7 +85,7 @@
       <h3><a href="post1.html">Purpose</a></h3>
       <p class="post-meta">April 12, 2026</p>
       <p>
-        Practicing/living in a monestary in the (basically) tundra that is Vermont, I wanted to share about where I live and the mission to preserve life on earth.
+        Practicing/living in a monastery in the (basically) tundra that is Vermont, I wanted to share about where I live and the mission to preserve life on earth.
       </p>
     </article>
 
@@ -80,7 +99,7 @@
       <h3><a href="post1.html">Prayer Wheel</a></h3>
       <p class="post-meta">May 8, 2026</p>
       <p>
-        Practicing/living in a monestary in the (basically) tundra that is Vermont, I wanted to share about where I live and the mission to preserve life on earth.
+        Practicing/living in a monastery in Vermont, I wanted to share about where I live and the mission to preserve life on earth.
       </p>
     </article>
 
@@ -91,78 +110,14 @@
   <p>© 2026 Right Living, Right Joy</p>
 </footer>
 
-<!-- MANTRA ENGINE SCRIPT -->
 <script>
-const canvas = document.getElementById("mantra-canvas");
-const ctx = canvas.getContext("2d");
+let cycles = Number(localStorage.getItem("cycles")) || 0;
 
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-window.addEventListener("resize", resize);
-resize();
-
-// Sacred text sources
-const mantras = [
-  "OM MANI PADME HUM",
-  "OM VAJRASATTVA HUM",
-  "OM BENZA SATTO HUNG",
-  "OM MANI PADME HUM",
-  "OM VAJRASATTVA HUM"
-];
-
-// Dense flow system
-const rows = [];
-const ROW_SPACING = 12;   // tighter = more dense
-const FONT_SIZE = 10;
-const SPEED = 1.5;        // horizontal motion speed
-
-function initRows() {
-  rows.length = 0;
-  const numRows = Math.ceil(canvas.height / ROW_SPACING) + 2;
-
-  for (let i = 0; i < numRows; i++) {
-    rows.push({
-      y: i * ROW_SPACING,
-      offset: Math.random() * 1000
-    });
-  }
-}
-initRows();
-window.addEventListener("resize", initRows);
-
-ctx.font = FONT_SIZE + "px monospace";
-
-function draw() {
-  // clear
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = "black";
-  ctx.font = FONT_SIZE + "px monospace";
-
-  for (let row of rows) {
-    let x = -row.offset;
-    const y = row.y;
-
-    while (x < canvas.width) {
-      const m = mantras[(Math.abs(x + row.y) | 0) % mantras.length];
-      ctx.fillText(m, x, y);
-
-      // extreme density (overlapping intentional)
-      x += 110;
-    }
-
-    // flow motion
-    row.offset += SPEED;
-    if (row.offset > 110) row.offset = 0;
-  }
-
-  requestAnimationFrame(draw);
-}
-
-draw();
+setInterval(() => {
+  cycles++;
+  localStorage.setItem("cycles", cycles);
+  console.log("Prayer wheel cycles:", cycles);
+}, 240000);
 </script>
 
 </body>
